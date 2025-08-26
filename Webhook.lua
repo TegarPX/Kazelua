@@ -11,7 +11,7 @@ function removeColorAndSymbols(str)
     cleanedStr = string.gsub(cleanedStr, "`{2}|(~{2})", '')
     return cleanedStr 
 end
-local namep = removeColorAndSymbols(GetLocal().name)
+local name = removeColorAndSymbols(GetLocal().name)
 
 local h = {"Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"}
 local b = {"Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"}
