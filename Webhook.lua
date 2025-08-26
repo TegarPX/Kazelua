@@ -55,7 +55,6 @@ local requestBody = [[
 MakeRequest(whlink, "POST", {["Content-Type"] = "application/json"}, requestBody)
 end
 
-if proxy then
   function lpg()
 local requestBody = [[
 {
@@ -89,5 +88,4 @@ local requestBody = [[
 ]]
 
 MakeRequest(myLink, "POST", {["Content-Type"] = "application/json"}, requestBody)
-end
 end
