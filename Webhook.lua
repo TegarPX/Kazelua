@@ -21,7 +21,7 @@ local tanggal = string.format("%s, %d %s %d", h[t.wday], t.day, b[t.month], t.ye
 
 
 
-if run then
+
 local requestBody = [[
 {
   "username": "Kazelua BOT",
@@ -53,7 +53,7 @@ local requestBody = [[
 ]]
 
 MakeRequest(whlink, "POST", {["Content-Type"] = "application/json"}, requestBody)
-end
+
 
   function lpg()
 local requestBody = [[
