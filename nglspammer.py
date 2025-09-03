@@ -218,6 +218,7 @@ def main():
     app = Application.builder().token(BOT_TOKEN).build()
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_command))
     log_event("info", "💻 Bot Telegram berjalan... Made by TegarP with Python")
+    log_event("info", "Bot Telegram Status : 🟢 ( online )")
     app.run_polling()
 
 if __name__ == "__main__":
