@@ -1,6 +1,3 @@
-# ==========================
-# IMPORT MODULE
-# ==========================
 import requests
 import random
 import time
@@ -9,16 +6,10 @@ from datetime import datetime, timedelta
 from telegram import Update
 from telegram.ext import Application, MessageHandler, filters, ContextTypes
 
-# ==========================
-# KONFIGURASI
-# ==========================
 BOT_TOKEN = "7597556159:AAEFFBASEn3DPTHaUqXh7ygQkuHTrTKlP90"
 user_data = {}
-bot_start_time = datetime.now()  # waktu mulai bot
+bot_start_time = datetime.now()
 
-# ==========================
-# LOGGING
-# ==========================
 logging.basicConfig(
     filename="ngl_bot.log",
     level=logging.INFO,
@@ -33,11 +24,7 @@ def log_event(level, message):
         logging.error(message)
     print(f"[LOG] {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - {message}")
 
-# ==========================
-# FUNGSI KIRIM NGL
-# ==========================
 def send_to_ngl(url: str, message: str) -> bool:
-    """Kirim pesan ke NGL via URL"""
     data = {
         "username": url.split("/")[-1],
         "question": message,
@@ -52,9 +39,6 @@ def send_to_ngl(url: str, message: str) -> bool:
         log_event("error", f"Error kirim ke NGL: {e}")
         return False
 
-# ==========================
-# FUNGSI FORMAT UPTIME
-# ==========================
 def format_uptime(start_time):
     now = datetime.now()
     delta: timedelta = now - start_time
@@ -63,45 +47,29 @@ def format_uptime(start_time):
     minutes, seconds = divmod(remainder, 60)
     return days, hours, minutes, seconds
 
-# ==========================
-# MENU / HELP
-# ==========================
 async def show_menu(update: Update):
     menu_text = (
         "📝 *BANTUAN BOT NGL*\n"
         "────────────────────────\n"
         "🌐 `.sngl <URL>`\n"
-        "   Set URL NGL lengkap, contoh: https://ngl.link/ngl12345\n\n"
         "💬 `.steksN <pesan>`\n"
-        "   Simpan teks pesan N (1-100), contoh: `.steks1 Halo!`\n\n"
         "🔢 `.stotal <jumlah>`\n"
-        "   Jumlah pesan yang ingin dikirim, contoh: `.stotal 5`\n\n"
         "🏷️ `.sname <nama>`\n"
-        "   Nama pengirim (opsional), contoh: `.sname Kazelua Bot`\n\n"
         "📊 `.status`\n"
-        "   Lihat status pengaturan saat ini\n\n"
         "♻️ `.reset`\n"
-        "   Reset semua pengaturan\n\n"
         "🧹 `.clear`\n"
-        "   Bersihkan log bot\n\n"
         "⏱️ `.uptime`\n"
-        "   Lihat berapa lama bot berjalan\n\n"
         "🚀 `.send`\n"
-        "   Mulai mengirim pesan ke NGL\n"
         "────────────────────────\n"
         "💻 *Made by TegarP with Python*"
     )
     await update.message.reply_text(menu_text, parse_mode="Markdown")
 
-# ==========================
-# HANDLER COMMAND
-# ==========================
 async def handle_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     username_telegram = update.effective_user.username or update.effective_user.first_name
     text = update.message.text.strip()
 
-    # Default user data
     if chat_id not in user_data:
         user_data[chat_id] = {
             "ngl_url": None,
@@ -112,12 +80,10 @@ async def handle_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     data = user_data[chat_id]
     log_event("info", f"Command diterima dari {username_telegram} (id={chat_id}): {text}")
 
-    # ===== MENU / HELP =====
     if text.lower() in [".menu", ".help"]:
         await show_menu(update)
         return
 
-    # ===== SET NGL URL =====
     if text.lower().startswith(".sngl "):
         url = text.split(" ", 1)[1].strip()
         if url.startswith("https://ngl.link/"):
@@ -128,7 +94,6 @@ async def handle_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("❌ URL harus diawali https://ngl.link/")
         return
 
-    # ===== SET TEKS MULTI =====
     if text.lower().startswith(".steks"):
         try:
             parts = text.split(" ", 1)
@@ -144,7 +109,6 @@ async def handle_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("❌ Format salah. Gunakan `.steksN <teks>` contoh `.steks1 Halo`")
         return
 
-    # ===== SET TOTAL =====
     if text.lower().startswith(".stotal "):
         try:
             total = int(text.split(" ", 1)[1])
@@ -158,7 +122,6 @@ async def handle_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("❌ Format salah. Gunakan angka, contoh: `.stotal 10`")
         return
 
-    # ===== SET NAMA PENGIRIM =====
     if text.lower().startswith(".sname "):
         sender_name = text.split(" ", 1)[1].strip()
         data["sender_name"] = sender_name
@@ -166,7 +129,6 @@ async def handle_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"✅ Nama pengirim diset ke: `{sender_name}`", parse_mode="Markdown")
         return
 
-    # ===== STATUS =====
     if text.lower() == ".status":
         if data["messages"]:
             messages_list = "\n".join([f"{i}. {v}" for i, v in sorted(data["messages"].items())])
@@ -185,7 +147,6 @@ async def handle_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(status_text, parse_mode="Markdown")
         return
 
-    # ===== RESET =====
     if text.lower() == ".reset":
         user_data[chat_id] = {
             "ngl_url": None,
@@ -197,7 +158,6 @@ async def handle_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("♻️ Semua pengaturan kamu sudah direset.")
         return
 
-    # ===== CLEAR LOG =====
     if text.lower() == ".clear":
         try:
             open("ngl_bot.log", "w").close()
@@ -208,7 +168,6 @@ async def handle_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("❌ Terjadi kesalahan saat membersihkan log.")
         return
 
-    # ===== UPTIME =====
     if text.lower() == ".uptime":
         days, hours, minutes, seconds = format_uptime(bot_start_time)
         start_str = bot_start_time.strftime("%Y-%m-%d %H:%M:%S")
@@ -223,7 +182,6 @@ async def handle_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(uptime_text, parse_mode="Markdown")
         return
 
-    # ===== SEND =====
     if text.lower() == ".send":
         if not data["ngl_url"]:
             await update.message.reply_text("❌ URL NGL belum diset. Gunakan `.sngl <URL>`")
@@ -254,12 +212,8 @@ async def handle_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"🎉 Selesai! {success}/{total} pesan berhasil dikirim ke `{data['ngl_url']}`.")
         return
 
-    # ===== COMMAND TIDAK DIKENAL =====
     await update.message.reply_text("❌ Command tidak dikenal. Ketik `.menu` untuk bantuan.")
 
-# ==========================
-# MAIN
-# ==========================
 def main():
     app = Application.builder().token(BOT_TOKEN).build()
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_command))
