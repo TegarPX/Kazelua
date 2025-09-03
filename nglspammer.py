@@ -1,29 +1,4 @@
 # ==========================
-# CEK MODULE WAJIB SEBELUM RUN
-# ==========================
-import sys
-
-required_modules = ["requests", "python-telegram-bot"]
-
-missing_modules = []
-
-for module in required_modules:
-    try:
-        __import__(module)
-    except ImportError:
-        missing_modules.append(module)
-
-if missing_modules:
-    print("❌ Script tidak bisa dijalankan. Module berikut belum terinstall:")
-    for m in missing_modules:
-        print(f"   - {m}")
-    print("\n📌 Langkah-langkah install module:")
-    for m in missing_modules:
-        print(f"   pip install {m}")
-    print("\nSetelah semua module terinstall, jalankan script lagi.")
-    sys.exit(1)
-
-# ==========================
 # IMPORT MODULE
 # ==========================
 import requests
