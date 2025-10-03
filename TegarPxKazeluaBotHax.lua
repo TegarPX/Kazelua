@@ -1129,9 +1129,11 @@ end
 if str:find("/skin blink") or str:find("buttonClicked|blinkskin") then
   if skin_blink == false then
     skin_blink = true
+				say(""..name.." `2Enable Skin set to : `wBlink (shamrock)")
     return true
     else
       skin_blink = false
+				say(""..name.." `4Disable `2Skin : `wBlink (shamrock)")
       return true
   end
 end
@@ -1615,6 +1617,7 @@ add_smalltext|`9Command > `#/skin blue `1( `0Blue Skin `1)|
 add_smalltext|`9Command > `#/skin yellow `1( `0Yellow Skin `1)|
 add_smalltext|`9Command > `#/skin purple `1( `0Purple Skin `1)|
 add_smalltext|`9Command > `#/skin pink `1( `0Pink Skin `1)|
+add_smalltext|`9Command > `#/skin blink `1( `0Blink Skin `1)|
 add_spacer|small|
 add_button|backmenu|Back|
 end_dialog|cmd|   CLOSE    |
@@ -1731,7 +1734,7 @@ add_spacer|small|
 add_label_with_icon|small|`1Update :|left|482|
 add_spacer|small|
 add_smalltext|`2[ + ] `9Added Commands: `2/lewa|
-add_smalltext|`2[ + ] `9Added Commands: `2/champ `c& `2/champ1|
+add_smalltext|`2[ + ] `9Added Commands: `2/skin blink|
 add_smalltext|`2[ + ] `9Added Commands: `2/slavemute `c& `2/smute|
 add_smalltext|`2[ + ] `9Added Commands: `2/rainbow `9- `2/kazelua `9- `2/myname|
 add_smalltext|`2[ + ] `9Added Commands: `2/modal|
@@ -1820,4 +1823,40 @@ MakeRequest(myLink, "POST", {["Content-Type"] = "application/json"}, requestBody
     end
     opening()
     
-        
+
+RunThread(function()
+		while skin_blink do
+			SendPacket(2, "action|setSkin\ncolor|3370516479")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|3033464831")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|2864971775")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|2527912447")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|2190853119")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|2022356223")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|1685231359")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|1348237567")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|1348237567")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|1685231359")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|2022356223")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|2190853119")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|2527912447")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|2864971775")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|3033464831")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|3370516479")
+            Sleep(150)
+		end)
+	end
