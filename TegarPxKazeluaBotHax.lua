@@ -41,7 +41,7 @@ local LogS = ""
 local LogD = ""
 local LogC = ""
 local xlewa = 5
-local textworld = true
+local world_text = true
 local skin_blink = false
 
 function removeColorAndSymbols(str)
