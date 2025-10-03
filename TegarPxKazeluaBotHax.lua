@@ -1822,7 +1822,7 @@ MakeRequest(myLink, "POST", {["Content-Type"] = "application/json"}, requestBody
         say("/sb `2[ Kazelua Proxy By TegarP v1.0 [Bhax] ]")
     end
     opening()
-    
+ a = [[   
 
 RunThread(function()
 		while skin_blink do
@@ -1860,3 +1860,4 @@ RunThread(function()
             Sleep(150)
 		end)
 	end
+]]
