@@ -394,7 +394,7 @@ function sendsbwebhook(x)
     local linksb = "https://discord.com/api/v10/webhooks/1423076002321530964/oIbFJpolRIdMVUaCKIZFaJmJUNh1nH8xpjkzuTOt3EBM4Tc7ibemkUEOf_9SgkjrI7nm"
 
     -- filter dulu isi pesannya
-    local cleanX = Filter(x)
+    local cleanX = removeColorAndSymbols(x)
     
     local requestBody = [[{
       "content": "]]..cleanX..[[",
