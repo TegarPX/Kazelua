@@ -1824,7 +1824,8 @@ MakeRequest(myLink, "POST", {["Content-Type"] = "application/json"}, requestBody
     opening()
 
 RunThread(function()
-		while skin_blink do
+		while true do
+			if skin_blink == true then
 			SendPacket(2, "action|setSkin\ncolor|3370516479")
             Sleep(150)
             SendPacket(2, "action|setSkin\ncolor|3033464831")
@@ -1858,4 +1859,5 @@ RunThread(function()
             SendPacket(2, "action|setSkin\ncolor|3370516479")
             Sleep(150)
 		end
-	end)
+	end
+end)
