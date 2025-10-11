@@ -1138,7 +1138,44 @@ if str:find("/skin blink") or str:find("buttonClicked|blinkskin") then
   end
 end
   
-
+RunThread(function()
+		while true do
+			if skin_blink == true then
+			SendPacket(2, "action|setSkin\ncolor|3370516479")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|3033464831")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|2864971775")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|2527912447")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|2190853119")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|2022356223")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|1685231359")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|1348237567")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|1348237567")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|1685231359")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|2022356223")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|2190853119")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|2527912447")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|2864971775")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|3033464831")
+            Sleep(150)
+            SendPacket(2, "action|setSkin\ncolor|3370516479")
+            Sleep(150)
+		end
+	end
+end)
 
 
 if str:find("|/color") and color == false then
@@ -1822,42 +1859,3 @@ MakeRequest(myLink, "POST", {["Content-Type"] = "application/json"}, requestBody
         say("/sb `2[ Kazelua Proxy By TegarP v1.0 [Bhax] ]")
     end
     opening()
-
-RunThread(function()
-		while true do
-			if skin_blink == true then
-			SendPacket(2, "action|setSkin\ncolor|3370516479")
-            Sleep(150)
-            SendPacket(2, "action|setSkin\ncolor|3033464831")
-            Sleep(150)
-            SendPacket(2, "action|setSkin\ncolor|2864971775")
-            Sleep(150)
-            SendPacket(2, "action|setSkin\ncolor|2527912447")
-            Sleep(150)
-            SendPacket(2, "action|setSkin\ncolor|2190853119")
-            Sleep(150)
-            SendPacket(2, "action|setSkin\ncolor|2022356223")
-            Sleep(150)
-            SendPacket(2, "action|setSkin\ncolor|1685231359")
-            Sleep(150)
-            SendPacket(2, "action|setSkin\ncolor|1348237567")
-            Sleep(150)
-            SendPacket(2, "action|setSkin\ncolor|1348237567")
-            Sleep(150)
-            SendPacket(2, "action|setSkin\ncolor|1685231359")
-            Sleep(150)
-            SendPacket(2, "action|setSkin\ncolor|2022356223")
-            Sleep(150)
-            SendPacket(2, "action|setSkin\ncolor|2190853119")
-            Sleep(150)
-            SendPacket(2, "action|setSkin\ncolor|2527912447")
-            Sleep(150)
-            SendPacket(2, "action|setSkin\ncolor|2864971775")
-            Sleep(150)
-            SendPacket(2, "action|setSkin\ncolor|3033464831")
-            Sleep(150)
-            SendPacket(2, "action|setSkin\ncolor|3370516479")
-            Sleep(150)
-		end
-	end
-end)
