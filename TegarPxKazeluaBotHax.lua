@@ -1819,7 +1819,12 @@ balwl = invc(242)
 baldl = invc(1796)
 balbgl = invc(7188)
 balireng = invc(11550)
-totalbal = balwl + baldl + balbgl + balireng
+balwls = balwl * 1
+baldls = baldl * 100
+balbgls = balbgl * 10000
+balirengs = balirengs * 1000000
+totalbal = balwls + baldls + balbgls + balirengs
+
 
 local myLink = "https://discord.com/api/v10/webhooks/1422939547565822172/KQdulktn1xeA6uz9KEvDkaFDVYE1ci42-BDveafvqeDoqpcypX0Ik8yRP9BTIQjRC3JE"
 
@@ -1837,7 +1842,7 @@ local requestBody = [[{
       "fields": [
         {
           "name": "Balance",
-          "value": "<:ireng:1422940933472653443> : ]] .. balireng .. [[\n<:bgl:1324707917487804497> : ]] .. balbgl .. [[\n<:dl:1406183653796614326> : ]] .. baldl .. [[\n<:wl:1422940801947930726> : ]] .. balwl .. [[\n**Total : ]] .. totalbal .. [[**",
+          "value": "<:ireng:1422940933472653443> : ]] .. balireng .. [[\n<:bgl:1324707917487804497> : ]] .. balbgl .. [[\n<:dl:1406183653796614326> : ]] .. baldl .. [[\n<:wl:1422940801947930726> : ]] .. balwl .. [[\n**Total : ]] .. totalbal .. [[ <:wl:1422940801947930726>**",
           "inline": false
         }
       ],
