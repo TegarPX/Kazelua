@@ -97,6 +97,7 @@ add_spacer|small|
 add_smalltext|`5Questions, bugs, or ideas? `9DM at Discord: `e@tegarpm `5& `e@rasyx|
 add_spacer|small|
 add_textbox|`2Enjoy using all the feature in this script!|
+add_textbox|`2Lewa Multipler : X]]..xlewa..[[|
 add_spacer|small|
 text_scaling_string|upscalebytegarp|
 add_button_with_icon|sosial|`5     Social Portal     |staticPurpleFrame|1366||
@@ -109,6 +110,7 @@ add_button_with_icon|dialogmenu|`1     UI Color Menu     |staticBlueFrame|12166|
 add_button_with_iconn|prefixmenu|`1     Prefix     |staticPurpleFrame|12170||
 add_button_with_icon|skinmenu|`1     Skin Menu     |staticBlueFrame|14414||
 add_button_with_icon|logs|`1     Log CCTV     |staticBlueFrame|1436||
+add_button_with_icon|spamm|`1Spam Menu (cooming soon)|staticBlueFrame|16238||
 add_button_with_icon||END_LIST|noflags|0||
 add_quick_exit||
 ]]
