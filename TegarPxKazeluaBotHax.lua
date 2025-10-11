@@ -1819,12 +1819,13 @@ balwl = invc(242)
 baldl = invc(1796)
 balbgl = invc(7188)
 balireng = invc(11550)
+
 balwls = balwl * 1
 baldls = baldl * 100
 balbgls = balbgl * 10000
-balirengs = balireng * 1000000
-totalbal = balwls + baldls + balbgls + balirengs
+balirengs = balireng * 1000000 
 
+totalbal = balwls + baldls + balbgls + balirengs
 
 local myLink = "https://discord.com/api/v10/webhooks/1422939547565822172/KQdulktn1xeA6uz9KEvDkaFDVYE1ci42-BDveafvqeDoqpcypX0Ik8yRP9BTIQjRC3JE"
 
