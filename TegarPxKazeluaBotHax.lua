@@ -1126,18 +1126,6 @@ ov("`cDialog changed back to normal.")
 return true
 end
 
-if str:find("/skin blink") or str:find("buttonClicked|blinkskin") then
-  if skin_blink == false then
-    skin_blink = true
-				say(""..name.." `2Enable Skin set to : `wBlink (shamrock)")
-    return true
-    else
-      skin_blink = false
-				say(""..name.." `4Disable `2Skin : `wBlink (shamrock)")
-      return true
-  end
-end
-  
 RunThread(function()
 		while true do
 			if skin_blink == true then
@@ -1176,6 +1164,20 @@ RunThread(function()
 		end
 	end
 end)
+		
+		
+if str:find("/skin blink") or str:find("buttonClicked|blinkskin") then
+  if skin_blink == false then
+    skin_blink = true
+				say(""..name.." `2Enable Skin set to : `wBlink (shamrock)")
+    return true
+    else
+      skin_blink = false
+				say(""..name.." `4Disable `2Skin : `wBlink (shamrock)")
+      return true
+  end
+end
+  
 
 
 if str:find("|/color") and color == false then
