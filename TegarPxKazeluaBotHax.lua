@@ -1822,7 +1822,7 @@ balireng = invc(11550)
 balwls = balwl * 1
 baldls = baldl * 100
 balbgls = balbgl * 10000
-balirengs = balirengs * 1000000
+balirengs = balireng * 1000000
 totalbal = balwls + baldls + balbgls + balirengs
 
 
