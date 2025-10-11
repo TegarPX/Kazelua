@@ -1174,6 +1174,29 @@ SendPacket(2, "action|dialog_return\ndialog_name|skinpicker\nred|"..rs.."\ngreen
 return true
 end
 
+		local colors = {"4", "8", "9", "2"}
+function colorizeText(text)
+    local result, idx = "", 1
+    for i = 1, #text do
+        local c = text:sub(i, i)
+        if c ~= " " then
+            result = result .. "`" .. colors[idx] .. c
+            idx = (idx % #colors) + 1
+        else
+            result = result .. " "
+        end
+    end
+    return result
+end
+
+if prefix_rainbow and str:find("action|input\n|text|") 
+   and not str:find("|text|/") 
+   and not str:find("|text|%((%w+)%)") then
+    local Text = str:match("|text|([^\n]+)")
+    say(colorizeText(Text))
+    return true
+		end
+
 if str:find("action|input\n|text|") 
 and not str:find("|text|/") 
 and not str:find("|text|%((%w+)%)") then
@@ -1196,53 +1219,7 @@ and not str:find("|text|%((%w+)%)") then
     end
 end
 
-local darkToBright = {
-    "5", -- Ungu
-    "4", -- Merah
-    "6", -- Coklat Muda
-    "8", -- Oranye
-    "p", -- Merah Muda
-    "#", -- Merah Muda
-    "2", -- Hijau
-    "7", -- Abu-abu Muda
-    "@", -- Peach
-    "3", -- Biru Pucat
-    "1", -- Biru Langit
-    "!", -- Biru Muda
-    "$", -- Kuning Muda
-    "9", -- Kuning
-    "0", -- Putih
-}
 
-local function getColors()
-    return darkToBright
-end
-function colorizeText(text)
-    local colors = getColors()
-    local result, colorIndex = "", 1
-    
-    for i = 1, #text do
-        local char = text:sub(i,i)
-        if char ~= " " then
-            result = result .. "`" .. colors[colorIndex] .. char
-            colorIndex = colorIndex + 1
-            if colorIndex > #colors then colorIndex = 1 end
-        else
-            result = result .. " "
-        end
-    end
-    
-    return result
-end
-
-if prefix_rainbow and str:find("action|input\n|text|") 
-   and not str:find("|text|/") 
-   and not str:find("|text|%((%w+)%)") then
-    local Text = str:match("|text|([^\n]+)")
-    local hasil = colorizeText(Text)
-    say(hasil)
-    return true
-end
 
 if prefix_kazelua 
    and str:find("action|input\n|text|") 
