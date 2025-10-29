@@ -521,7 +521,7 @@ if str:find("action|wrench\n|netid|(%d+)") then
     local playerName = nil
 
     for _, player in pairs(GetPlayerList()) do
-        if player.netID == tonumber(id) then
+        if player.netid == tonumber(id) then
             playerName = player.name
             break
         end
