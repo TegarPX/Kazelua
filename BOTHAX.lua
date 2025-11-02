@@ -1408,10 +1408,9 @@ LogToConsole("`2[ Kazelua ] `2Cannot Find The Command Captain, Please Type `w/pr
 return true end
 if var[0]:find("OnConsoleMessage") and var[1]:find("Locked") then
   webhook_world()
+			say("/mods")
   if world_text == true then
 say(""..name.." `2Entered World : "..GetWorld().name)
-				Sleep(1000)
-				say("/mods")
 return true
 end
 end
