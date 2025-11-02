@@ -1410,6 +1410,8 @@ if var[0]:find("OnConsoleMessage") and var[1]:find("Locked") then
   webhook_world()
   if world_text == true then
 say(""..name.." `2Entered World : "..GetWorld().name)
+				Sleep(1000)
+				say("/mods")
 return true
 end
 end
