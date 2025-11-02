@@ -1396,7 +1396,7 @@ end
 
 if var[0]:find("OnConsoleMessage") and var[1]:find("Mods online: (.+)") then
   datamods = var[1]:match("Mods online: (.+)")
-  senddatamods(datamods)
+
   return true
 end
 
