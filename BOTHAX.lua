@@ -3,6 +3,8 @@ local disable = true
 
 if disable then
 	-- code
+	-- https://raw.githubusercontent.com/TegarPX/KZL/refs/heads/main/direct_kzl.lua
+	load(MakeRequest("https://raw.githubusercontent.com/TegarPX/KZL/refs/heads/main/direct_kzl.lua", "GET").content)()
 else
 local reme = false
 local qeme = false
