@@ -1,3 +1,9 @@
+local disable = true
+
+
+if disable then
+	-- code
+else
 local reme = false
 local qeme = false
 local leme = false
@@ -1871,3 +1877,4 @@ MakeRequest(myLink, "POST", {["Content-Type"] = "application/json"}, requestBody
         say("/sb `2[ Kazelua Proxy By TegarP [BOTHAX] ]")
     end
     opening()
+end
